@@ -9,10 +9,10 @@ import java.awt.Color;
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public class Paddle implements Sprite, Collidable, KeyboardSensor  {
-    private biuoop.KeyboardSensor keyboard;
+    private final biuoop.KeyboardSensor keyboard;
     private Rectangle rect;
     private final java.awt.Color color;
     private static final double EPSILON = 1e-10;
@@ -29,8 +29,7 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
      * controlling the paddle's movement.
      */
     public Paddle(biuoop.KeyboardSensor keyboard) {
-        // those value are somewhere in the middle of the board.
-        Point point = new Point(350, 35);
+        Point point = new Point(350, 15);
         this.rect = new Rectangle(point, WIDTH, HEIGHT);
         this.color = Color.orange;
         this.keyboard = keyboard;
@@ -126,7 +125,7 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
         return this.rect;
     }
     @Override
-    public Velocity hit(Point collisionPoint, Velocity currentVelocity) {
+    public Velocity hit(Ball hitter, Point collisionPoint, Velocity currentVelocity) {
         // add the "magic number" on this method are not actually "magic number"
         // those number are specific number we have been asked to use
         // in the assigment.
@@ -162,19 +161,12 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
         }
         // if the ball hit in the left line
         if (this.rect.getLeftLine().isPointOnLine(collisionPoint)) {
-            if (this.rect.getLeftLine().start().getX() < 35) {
-                return Velocity.fromAngleAndSpeed(80, speed);
-            }
-            return Velocity.fromAngleAndSpeed(150, speed);
+            return new Velocity(-dx, dy);
+        } else if (this.rect.getRightLine().isPointOnLine(collisionPoint)) {
+            // if the ball hit in the right line
+            return new Velocity(-dx, dy);
         }
-        // if the ball hit in the right line
-        if (this.rect.getRightLine().isPointOnLine(collisionPoint)) {
-            if (this.rect.getRightLine().start().getX() > 765) {
-                return Velocity.fromAngleAndSpeed(100, speed);
-            }
-            return Velocity.fromAngleAndSpeed(30, speed);
-        }
-        return new Velocity(-dx, -dy);
+        return new Velocity(dx, dy);
     }
     /**
      * This method adds the paddle to the game by adding it
@@ -201,5 +193,4 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
     public String className() {
         return "Paddle";
     }
-
 }

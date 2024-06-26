@@ -9,10 +9,10 @@ import java.util.List;
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public class GameEnvironment {
-    private List<Collidable> collidables;
+    private final List<Collidable> collidables;
     /**
      * Constructs a new GameEnvironment object wit an empty
      * collection of Collidable objects.
@@ -31,6 +31,18 @@ public class GameEnvironment {
             return;
         }
         this.collidables.add(c);
+    }
+    /**
+     * removes the given Collidable object to this GameEnvironment's collection.
+     * If the given object is null, does nothing.
+     *
+     * @param c the Collidable object to add
+     */
+    public void removeCollidable(Collidable c) {
+        if (c == null) {
+            return;
+        }
+        this.collidables.remove(c);
     }
     /**
      * Returns a List of all the Collidable.

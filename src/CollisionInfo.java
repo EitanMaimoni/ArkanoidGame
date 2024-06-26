@@ -6,11 +6,11 @@
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public class CollisionInfo {
-    private Point collisionPoint;
-    private Collidable collisionObject;
+    private final Point collisionPoint;
+    private final Collidable collisionObject;
     /**
      * Constructs a new CollisionInfo object with the given
      * collision point and collidable object.

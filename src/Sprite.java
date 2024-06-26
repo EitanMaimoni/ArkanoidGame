@@ -7,7 +7,7 @@ import biuoop.DrawSurface;
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public interface Sprite {
     /**

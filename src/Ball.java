@@ -7,7 +7,7 @@ import java.awt.Color;
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public class Ball implements Sprite {
     private Point point;
@@ -106,6 +106,23 @@ public class Ball implements Sprite {
     public Velocity getVelocity() {
         return this.velocity;
     }
+    /**
+     * Add the ball to the game.
+     *
+     * @param g the g
+     */
+    void addToGame(Game g) {
+        g.addSprite(this);
+    }
+    /**
+     * Removes the block to the specified game by adding
+     * it as a sprite and collidable.
+     *
+     * @param game the game to add the block to
+     */
+    public void removeFromGame(Game game) {
+        game.removeSprite(this);
+    }
     @Override
     public void drawOn(DrawSurface d) {
         int x = this.getX();
@@ -121,14 +138,6 @@ public class Ball implements Sprite {
     @Override
     public void timePassed() {
         moveOneStep();
-    }
-    /**
-     * Add the ball to the game.
-     *
-     * @param g the g
-     */
-    void addToGame(Game g) {
-        g.addSprite(this);
     }
     /**
      * Moves the ball one step according to its current velocity.
@@ -169,7 +178,7 @@ public class Ball implements Sprite {
             for (Collidable c : collidables) {
                 if (c.className().equals("Block")) {
                     Block block = (Block) c;
-                    temp = block.hitMultiCollidables(collisionPoint, this.velocity);
+                    temp = block.hitMultiCollidables(this, collisionPoint, this.velocity);
                 }
                 if (temp[0]) {
                     flag[0] = true;
@@ -187,7 +196,7 @@ public class Ball implements Sprite {
             setVelocity(dx, dy);
         } else {
             Collidable collidable = closest.collisionObject();
-            setVelocity(collidable.hit(collisionPoint, this.velocity));
+            setVelocity(collidable.hit(this, collisionPoint, this.velocity));
             if (collidable.className().equals("Paddle")) {
                 this.point = this.getVelocity().applyToPoint(this.point);
             }

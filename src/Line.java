@@ -126,15 +126,27 @@ public class Line {
             if (isDoubleEqual(pointX, lineX1)) {
                 return isInRange(lineY1, lineY2, pointY);
             }
-            return false;
         } else {
             // checks if point is on the line by using the
             // equation of the line (y=mx+c)
             if (Math.abs(pointY - this.slope * pointX - this.yIntercept) < EPSILON) {
                 return isInRange(lineX1, lineX2, pointX);
             }
-            return false;
         }
+        return false;
+    }
+    /**
+     * Determines whether a given lines that we already know they have same slope and has intersection overlap.
+     *
+     * @param thisStart the start of the first line to be checked
+     * @param thisEnd the end of the first line to be checked
+     * @param otherStart the start of the second line to be checked
+     * @param otherEnd the end of the second line to be checked
+     * @return true if the lines overlaps, false otherwise
+     */
+    public boolean isLineOverlap(double thisStart, double thisEnd, double otherStart, double otherEnd) {
+        return isInsideRange(otherStart, otherEnd, thisStart) || isInsideRange(otherStart, otherEnd, thisEnd)
+                || isInsideRange(thisStart, thisEnd, otherStart) || isInsideRange(thisStart, thisEnd, otherEnd);
     }
     /**
      * Return the length of the line.
@@ -278,8 +290,7 @@ public class Line {
         if (isDoubleEqual(other.slope, this.slope)) {
             // Check if the two lines overlap at any point
             // (we already know we have intersection)
-            if (isInsideRange(otherX1, otherX2, thisX1) || isInsideRange(otherX1, otherX2, thisX2)
-                    || isInsideRange(thisX1, thisX2, otherX1) || isInsideRange(thisX1, thisX2, otherX2)) {
+            if (isLineOverlap(thisX1, thisX2, otherX1, otherX2)) {
                 return null;
             } else {
                 // If the two lines don't overlap, and we already know that
@@ -317,8 +328,7 @@ public class Line {
         if (this.slope == NO_SLOPE && other.slope == NO_SLOPE) {
             // Check if the two lines overlap at any point
             // (we already know we have intersection)
-            if (isInsideRange(otherY1, otherY2, thisY1) || isInsideRange(otherY1, otherY2, thisY2)
-                    || isInsideRange(thisY1, thisY2, otherY1) || isInsideRange(thisY1, thisY2, otherY2)) {
+            if (isLineOverlap(thisY1, thisY2, otherY1, otherY2)) {
                 return null;
             } else {
                 // If the two lines don't overlap, and we already know that

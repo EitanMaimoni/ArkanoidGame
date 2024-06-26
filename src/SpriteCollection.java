@@ -8,10 +8,10 @@ import java.util.List;
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public class SpriteCollection {
-    private List<Sprite> sprites;
+    private final List<Sprite> sprites;
     /**
      * Constructs a new sprite collection.
      */
@@ -30,9 +30,22 @@ public class SpriteCollection {
         this.sprites.add(s);
     }
     /**
+     * remove a sprite to the collection.
+     *
+     * @param s the sprite to add
+     */
+    public void removeSprite(Sprite s) {
+        if (s == null) {
+            return;
+        }
+        this.sprites.remove(s);
+    }
+    /**
      * Notifies all sprites that a unit of time has passed.
      */
     public void notifyAllTimePassed() {
+        // Make a copy of the hitListeners before iterating over them.
+        List<Sprite> sprites = new ArrayList<Sprite>(this.sprites);
         for (Sprite s: sprites) {
             s.timePassed();
         }

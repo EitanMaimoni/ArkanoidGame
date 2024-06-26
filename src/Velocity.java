@@ -4,7 +4,7 @@
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public class Velocity {
     // The change in position on the x-axis.
@@ -12,7 +12,7 @@ public class Velocity {
     // The change in position on the y-axis.
     private final double dy;
     /**
-     * Instantiates a new Velocity object.
+     * Constructs a new Velocity object.
      *
      * @param dx the change in position on the x-axis
      * @param dy the change in position on the y-axis

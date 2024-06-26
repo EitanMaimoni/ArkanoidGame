@@ -7,7 +7,7 @@
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
 public interface Collidable {
     /**
@@ -20,11 +20,12 @@ public interface Collidable {
      * Calculates and returns the new velocity of the object, after a collision
      * with a given collision point and current velocity has occurred.
      *
+     * @param hitter the object that hit the collidable
      * @param collisionPoint the point at which the collision occurred
      * @param currentVelocity the current velocity of the object
      * @return the new velocity of the object after the collision
      */
-    Velocity hit(Point collisionPoint, Velocity currentVelocity);
+    Velocity hit(Ball hitter, Point collisionPoint, Velocity currentVelocity);
     /**
      * Returns the name of the specific class the collidable belong to.
      *

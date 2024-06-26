@@ -1,15 +1,18 @@
 import biuoop.DrawSurface;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Block class represents a block in 2D space.
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-05-04
+ * @since 2023-06-01
  */
-public class Block implements Collidable, Sprite {
+public class Block implements Collidable, Sprite, HitNotifier  {
+    private final List<HitListener> hitListeners;
     private final Rectangle rect;
     private final java.awt.Color color;
     private static final int Y_AXIS_FIX = 600;
@@ -22,6 +25,7 @@ public class Block implements Collidable, Sprite {
     public Block(Rectangle rectangle, java.awt.Color color) {
         this.rect = rectangle;
         this.color = color;
+        this.hitListeners = new ArrayList<>();
     }
     /**
      * Gets the color of the block.
@@ -45,9 +49,48 @@ public class Block implements Collidable, Sprite {
      *
      * @param g the game to add the block to
      */
-    void addToGame(Game g) {
+    public void addToGame(Game g) {
         g.addSprite(this);
         g.addCollidable(this);
+    }
+    /**
+     * Removes the block to the specified game by adding
+     * it as a sprite and collidable.
+     *
+     * @param game the game to add the block to
+     */
+    public void removeFromGame(Game game) {
+        game.removeSprite(this);
+        game.removeCollidable(this);
+    }
+    /**
+     * Adds a hit listener to the list.
+     *
+     * @param hl the HitListener to add
+     */
+    public void addHitListener(HitListener hl) {
+        this.hitListeners.add(hl);
+    }
+    /**
+     * Removes a hit listener from the list.
+     *
+     * @param hl the HitListener to remove
+     */
+    public void removeHitListener(HitListener hl) {
+        this.hitListeners.remove(hl);
+    }
+    /**
+     * Notifies all hit listeners about a hit event.
+     *
+     * @param hitter the Ball object that caused the hit
+     */
+    private void notifyHit(Ball hitter) {
+        // Make a copy of the hitListeners before iterating over them.
+        List<HitListener> listeners = new ArrayList<HitListener>(this.hitListeners);
+        // Notify all listeners about a hit event:
+        for (HitListener hl : listeners) {
+            hl.hitEvent(this, hitter);
+        }
     }
     /**
      * Checks if the ball need to change his velocity (dx and dy), in case there
@@ -55,10 +98,12 @@ public class Block implements Collidable, Sprite {
      *
      * @param collisionPoint  the point where the block was hit
      * @param currentVelocity the velocity of the object hitting the block
+     * @param hitter the ball that hit the block
      * @return an array of booleans (flags) indicating whether the ball should
      * change his DX or DY.
      */
-    public boolean[] hitMultiCollidables(Point collisionPoint, Velocity currentVelocity) {
+    public boolean[] hitMultiCollidables(Ball hitter, Point collisionPoint, Velocity currentVelocity) {
+        this.notifyHit(hitter);
         boolean[] flag = {false, false};
         double dx = currentVelocity.getDX();
         double dy = currentVelocity.getDY();
@@ -116,7 +161,9 @@ public class Block implements Collidable, Sprite {
     public Rectangle getCollisionRectangle() {
         return this.rect;
     }
-    @Override public Velocity hit(Point collisionPoint, Velocity currentVelocity) {
+    @Override
+    public Velocity hit(Ball hitter, Point collisionPoint, Velocity currentVelocity) {
+        this.notifyHit(hitter);
         double dx = currentVelocity.getDX();
         double dy = currentVelocity.getDY();
         if (this.rect.getLeftLine().isPointOnLine(collisionPoint) && dx > 0) {
@@ -149,7 +196,6 @@ public class Block implements Collidable, Sprite {
     }
     @Override
     public void timePassed() {
-        return;
     }
     @Override
     public String className() {
