@@ -4,7 +4,7 @@
  * It contains the point at which the collision occurs, and the collidable
  * object involved in the collision.
  *
- * @author Eitan Maimoni
+ * @author Eitan Maimoni 
  * @version 19.0.2
  * @since 2023-06-01
  */

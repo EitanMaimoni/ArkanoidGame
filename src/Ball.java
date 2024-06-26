@@ -4,7 +4,7 @@ import java.awt.Color;
 
 /**
  * The Ball class represents a 2D ball object.
- *
+ * 
  * @author Eitan Maimoni
  * @version 19.0.2
  * @since 2023-06-01
@@ -111,17 +111,17 @@ public class Ball implements Sprite {
      *
      * @param g the g
      */
-    void addToGame(Game g) {
+    void addToGame(GameLevel g) {
         g.addSprite(this);
     }
     /**
      * Removes the block to the specified game by adding
      * it as a sprite and collidable.
      *
-     * @param game the game to add the block to
+     * @param gameLevel the game to add the block to
      */
-    public void removeFromGame(Game game) {
-        game.removeSprite(this);
+    public void removeFromGame(GameLevel gameLevel) {
+        gameLevel.removeSprite(this);
     }
     @Override
     public void drawOn(DrawSurface d) {
@@ -130,6 +130,8 @@ public class Ball implements Sprite {
         int r = this.getSize();
         // draw the ball as a filled circle with the given color
         // *600 - y because the original board y-axis is opposite
+        d.setColor(Color.black);
+        d.fillCircle(x, Y_AXIS_FIX - y, r + 1);
         d.setColor(this.getColor());
         d.fillCircle(x, Y_AXIS_FIX - y, r);
         d.setColor(Color.red);

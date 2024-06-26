@@ -5,9 +5,9 @@
  * It also has a hit method that is called when a collision occurs,
  * to calculate the new velocity of the object.
  *
- * @author Eitan Maimoni
+ * @author Eitan Maimoni 
  * @version 19.0.2
- * @since 2023-06-01
+ * @since 2023-06-07
  */
 public interface Collidable {
     /**

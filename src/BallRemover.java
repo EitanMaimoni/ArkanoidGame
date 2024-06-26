@@ -7,22 +7,22 @@
  * @since 2023-06-01
  */
 public class BallRemover implements HitListener {
-    private final Game game;
+    private final GameLevel gameLevel;
     private final Counter remainingBalls;
     /**
      * Constructs a new Block remover.
      *
-     * @param game          the game
-     * @param removedBlocks the removed blocks
+     * @param gameLevel          the game
+     * @param removedBalls the removed blocks
      */
-    public BallRemover(Game game, Counter removedBlocks) {
-        this.game = game;
-        this.remainingBalls = removedBlocks;
+    public BallRemover(GameLevel gameLevel, Counter removedBalls) {
+        this.gameLevel = gameLevel;
+        this.remainingBalls = removedBalls;
     }
     @Override
     public void hitEvent(Block beingHit, Ball hitter) {
         if (beingHit.getRectangle().getUpperLeftPoint().getY() == 0) {
-            hitter.removeFromGame(game);
+            hitter.removeFromGame(gameLevel);
             remainingBalls.decrease(1);
         }
     }

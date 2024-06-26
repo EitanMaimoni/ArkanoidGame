@@ -12,27 +12,33 @@ import java.awt.Color;
  * @since 2023-06-01
  */
 public class Paddle implements Sprite, Collidable, KeyboardSensor  {
+
     private final biuoop.KeyboardSensor keyboard;
     private Rectangle rect;
     private final java.awt.Color color;
+    private final int speed;
+    private final int width;
     private static final double EPSILON = 1e-10;
-    private static final double WIDTH = 100;
-    private static final double HEIGHT = 10;
-    private static final double STEP = 5;
     private static final int Y_AXIS_FIX = 600;
     private static final int BORDER_WIDTH = 24;
     private static final int WINDOW_WIDTH = 800;
+    private static final double HEIGHT = 15;
     /**
      * Constructs a new Paddle object with a specified keyboard sensor.
      *
      * @param keyboard The keyboard sensor to use for
+     * @param speed The speed of the paddle
+     * @param width The width of the paddle
      * controlling the paddle's movement.
      */
-    public Paddle(biuoop.KeyboardSensor keyboard) {
-        Point point = new Point(350, 15);
-        this.rect = new Rectangle(point, WIDTH, HEIGHT);
+    public Paddle(biuoop.KeyboardSensor keyboard, int speed, int width) {
+        double x = (400 - (width * 0.5));
+        Point point = new Point(x, 15);
+        this.rect = new Rectangle(point, width, HEIGHT);
         this.color = Color.orange;
         this.keyboard = keyboard;
+        this.speed = speed;
+        this.width = width;
     }
     /**
      * Returns true if the specified key is currently
@@ -61,11 +67,11 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
      * Moves the paddle one step to the left.
      */
     public void moveLeft() {
-        double newX = this.rect.getUpperLeftPoint().getX() - STEP;
+        double newX = this.rect.getUpperLeftPoint().getX() - this.speed;
         if (isDoubleEqual(newX, BORDER_WIDTH) || newX < BORDER_WIDTH) {
             return;
         }
-        Point point = new Point(this.rect.getUpperLeftPoint(), -STEP, 0);
+        Point point = new Point(this.rect.getUpperLeftPoint(), -this.speed, 0);
         double width = this.rect.getWidth();
         double height = this.rect.getHeight();
         this.rect = new Rectangle(point, width, height);
@@ -74,12 +80,12 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
      * Moves the paddle one step to the right.
      */
     public void moveRight() {
-        double newX = this.rect.getUpperLeftPoint().getX() + WIDTH + STEP;
+        double newX = this.rect.getUpperLeftPoint().getX() + this.width + this.speed;
         if (isDoubleEqual(newX, WINDOW_WIDTH - BORDER_WIDTH)
                 || newX > WINDOW_WIDTH - BORDER_WIDTH) {
             return;
         }
-        Point point = new Point(this.rect.getUpperLeftPoint(), STEP, 0);
+        Point point = new Point(this.rect.getUpperLeftPoint(), this.speed, 0);
         double width = this.rect.getWidth();
         double height = this.rect.getHeight();
         this.rect = new Rectangle(point, width, height);
@@ -173,7 +179,7 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
      * as both a sprite and a collidable.
      * @param g the game to add the paddle to.
      * */
-    public void addToGame(Game g) {
+    public void addToGame(GameLevel g) {
         g.addSprite(this);
         g.addCollidable(this);
     }

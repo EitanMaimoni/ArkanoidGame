@@ -7,7 +7,7 @@ import java.util.List;
  * It manages a collection of Collidable objects and provides methods
  * for adding new objects to the collection and checking for collisions.
  *
- * @author Eitan Maimoni
+ * @author Eitan Maimoni 
  * @version 19.0.2
  * @since 2023-06-01
  */

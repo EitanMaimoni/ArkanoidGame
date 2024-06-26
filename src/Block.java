@@ -49,7 +49,7 @@ public class Block implements Collidable, Sprite, HitNotifier  {
      *
      * @param g the game to add the block to
      */
-    public void addToGame(Game g) {
+    public void addToGame(GameLevel g) {
         g.addSprite(this);
         g.addCollidable(this);
     }
@@ -57,11 +57,11 @@ public class Block implements Collidable, Sprite, HitNotifier  {
      * Removes the block to the specified game by adding
      * it as a sprite and collidable.
      *
-     * @param game the game to add the block to
+     * @param gameLevel the game to add the block to
      */
-    public void removeFromGame(Game game) {
-        game.removeSprite(this);
-        game.removeCollidable(this);
+    public void removeFromGame(GameLevel gameLevel) {
+        gameLevel.removeSprite(this);
+        gameLevel.removeCollidable(this);
     }
     /**
      * Adds a hit listener to the list.

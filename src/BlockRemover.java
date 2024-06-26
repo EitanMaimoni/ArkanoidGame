@@ -9,21 +9,21 @@
  * @since 2023-06-01
  */
 public class BlockRemover implements HitListener {
-    private final Game game;
+    private final GameLevel gameLevel;
     private final Counter remainingBlocks;
     /**
      * Constructs a new BlockRemover.
      *
-     * @param game          the game from which blocks will be removed
+     * @param gameLevel          the game from which blocks will be removed
      * @param removedBlocks the counter of remaining blocks
      */
-    public BlockRemover(Game game, Counter removedBlocks) {
-        this.game = game;
+    public BlockRemover(GameLevel gameLevel, Counter removedBlocks) {
+        this.gameLevel = gameLevel;
         this.remainingBlocks = removedBlocks;
     }
     @Override
     public void hitEvent(Block beingHit, Ball hitter) {
-        beingHit.removeFromGame(game);
+        beingHit.removeFromGame(gameLevel);
         remainingBlocks.decrease(1);
     }
 }

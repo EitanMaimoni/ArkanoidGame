@@ -2,7 +2,7 @@
  * The Counter class represents a simple counter that can be incremented or decremented.
  * It stores an integer value and provides methods to modify and retrieve the value.
  *
- * @author Eitan Maimoni
+ * @author Eitan Maimoni 
  * @version 19.0.2
  * @since 2023-06-01
  */
