@@ -1,24 +1,21 @@
 import biuoop.DrawSurface;
 
+import java.awt.Color;
+
 /**
- * The Ball class represents a 2D ball object
- * with a position, radius, color, and velocity.
+ * The Ball class represents a 2D ball object.
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-04-20
+ * @since 2023-05-04
  */
-public class Ball {
+public class Ball implements Sprite {
     private Point point;
     private final int radius;
     private final java.awt.Color color;
     private Velocity velocity = null;
-    private int xLeftBorder = 0;
-    private int xRightBorder = 200;
-    private int yBottomBorder = 0;
-    private int yTopBorder = 200;
-    //200 and 0 are the default borders
-    private static final double EPSILON = 1e-10;
+    private GameEnvironment environment;
+    private static final int Y_AXIS_FIX = 600;
     /**
      * Constructs a new Ball with the given position, radius, and color.
      *
@@ -45,18 +42,12 @@ public class Ball {
         this.color = color;
     }
     /**
-     * Sets the borders for this Rectangle object.
+     * Sets the game environment for the ball.
      *
-     * @param xLeft the leftmost x-coordinate of the rectangle
-     * @param xRight the rightmost x-coordinate of the rectangle
-     * @param yBottom the bottommost y-coordinate of the rectangle
-     * @param yTop the topmost y-coordinate of the rectangle
+     * @param environment the environment
      */
-    public void setBorders(int xLeft, int xRight, int yBottom, int yTop) {
-        this.xLeftBorder = xLeft;
-        this.xRightBorder = xRight;
-        this.yTopBorder = yTop;
-        this.yBottomBorder = yBottom;
+    public void setEnvironment(GameEnvironment environment) {
+        this.environment = environment;
     }
     /**
      * Returns the x coordinate of the center of the ball.
@@ -115,51 +106,92 @@ public class Ball {
     public Velocity getVelocity() {
         return this.velocity;
     }
-    /**
-     * Draws the ball on the given surface.
-     *
-     * @param surface the surface to draw on
-     */
-    public void drawOn(DrawSurface surface) {
+    @Override
+    public void drawOn(DrawSurface d) {
         int x = this.getX();
         int y = this.getY();
         int r = this.getSize();
         // draw the ball as a filled circle with the given color
-        surface.setColor(this.getColor());
-        surface.fillCircle(x, y, r);
+        // *600 - y because the original board y-axis is opposite
+        d.setColor(this.getColor());
+        d.fillCircle(x, Y_AXIS_FIX - y, r);
+        d.setColor(Color.red);
+        d.fillCircle(x, Y_AXIS_FIX - y, 2);
+    }
+    @Override
+    public void timePassed() {
+        moveOneStep();
     }
     /**
-     * Move one step within the given boundaries.
-     * If the velocity of the ball is null, the ball will not move.
-     * The ball's position is updated based on its current velocity,
-     * and the velocity is updated if the ball hits a boundary.
+     * Add the ball to the game.
+     *
+     * @param g the g
+     */
+    void addToGame(Game g) {
+        g.addSprite(this);
+    }
+    /**
+     * Moves the ball one step according to its current velocity.
+     * If the ball has no velocity, nothing happens.
+     * If the ball collides with a collidable object in its trajectory,
+     * its velocity is updated accordingly.
+     * Otherwise, the ball moves to its new position according to its velocity.
      */
     public void moveOneStep() {
         if (velocity == null) {
             return;
         }
-        // Get the current position and velocity of the ball
-        double x1, y1, r, dx, dy;
-        x1 = this.getX();
-        y1 = this.getY();
-        r = this.radius;
-        dx = velocity.getVelocityX();
-        dy = velocity.getVelocityY();
-        // Check if the ball hits a horizontal boundary
-        // and update the x velocity accordingly
-        if (EPSILON > xRightBorder - (x1 + r + dx)
-                || EPSILON > (x1 - r + dx) - xLeftBorder) {
-            dx = -dx;
+        double dx = velocity.getDX();
+        double dy = velocity.getDY();
+        double x = this.point.getX();
+        double y = this.point.getY();
+        Point start = new Point(x, y);
+        Point end = new Point(x + dx, y + dy);
+        Line trajectory = new Line(start, end);
+        // get the closest collision point
+        CollisionInfo closest = environment.getClosestCollision(trajectory);
+        // if there is no collision, the ball moves according to its velocity
+        if (closest == null) {
+            this.point = this.getVelocity().applyToPoint(this.point);
+            return;
         }
-        // Check if the ball hits a vertical boundary
-        // and update the y velocity accordingly
-        if (EPSILON > yTopBorder - (y1 + r + dy)
-                || EPSILON > (y1 - r + dy) - yBottomBorder) {
-            dy = -dy;
+        Point collisionPoint = closest.collisionPoint();
+        // checks if the collision point is on more than 1 collidables
+        java.util.List<Collidable> collidables;
+        collidables = environment.getCollidablesOnPoint(collisionPoint);
+        // if there are more than 1 collidable on the collision point
+        // we set flags and send the collision point and the
+        // collidables to special method that will change the flags if we need
+        // to change the DX or DY.
+        if (collidables.size() >= 2) {
+            boolean[] flag = {false, false};
+            boolean[] temp = {false, false};
+            for (Collidable c : collidables) {
+                if (c.className().equals("Block")) {
+                    Block block = (Block) c;
+                    temp = block.hitMultiCollidables(collisionPoint, this.velocity);
+                }
+                if (temp[0]) {
+                    flag[0] = true;
+                }
+                if (temp[1]) {
+                    flag[1] = true;
+                }
+            }
+            if (flag[1]) {
+                dx = -dx;
+            }
+            if (flag[0]) {
+                dy = -dy;
+            }
+            setVelocity(dx, dy);
+        } else {
+            Collidable collidable = closest.collisionObject();
+            setVelocity(collidable.hit(collisionPoint, this.velocity));
+            if (collidable.className().equals("Paddle")) {
+                this.point = this.getVelocity().applyToPoint(this.point);
+            }
         }
-        // Update the velocity and position of the ball
-        this.velocity = new Velocity(dx, dy);
-        this.point = this.getVelocity().applyToPoint(this.point);
     }
 }
 

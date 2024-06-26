@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: TestForAss2
+Main-Class: Ass3Game
 Class-Path: ../lib/biuoop-1.4.jar

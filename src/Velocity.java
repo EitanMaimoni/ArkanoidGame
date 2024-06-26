@@ -2,11 +2,10 @@
  * The Velocity class specifies the change in
  * position on the `x` and the `y` axes.
  *
- * @author Eitan Maimoni 
+ * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-04-20
+ * @since 2023-05-04
  */
-
 public class Velocity {
     // The change in position on the x-axis.
     private final double dx;
@@ -30,8 +29,7 @@ public class Velocity {
      * @return the new Velocity object
      */
     public static Velocity fromAngleAndSpeed(double angleDeg, double speed) {
-        // (-90 because in the assigment 0 is up)
-        double angleInRadians = Math.toRadians(angleDeg - 90);
+        double angleInRadians = Math.toRadians(angleDeg);
         double dx = speed * Math.cos(angleInRadians);
         double dy = speed * Math.sin(angleInRadians);
         return new Velocity(dx, dy);
@@ -43,8 +41,8 @@ public class Velocity {
      * @return a new point with the velocity applied to it
      */
     public Point applyToPoint(Point p) {
-        double x = p.getX() + this.getVelocityX();
-        double y = p.getY() + this.getVelocityY();
+        double x = p.getX() + this.getDX();
+        double y = p.getY() + this.getDY();
         return new Point(x, y);
     }
     /**
@@ -52,7 +50,7 @@ public class Velocity {
      *
      * @return the change in position on the x-axis
      */
-    public double getVelocityX() {
+    public double getDX() {
         return this.dx;
     }
     /**
@@ -60,7 +58,7 @@ public class Velocity {
      *
      * @return the change in position on the y-axis
      */
-    public double getVelocityY() {
+    public double getDY() {
         return this.dy;
     }
 }

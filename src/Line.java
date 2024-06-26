@@ -1,33 +1,32 @@
+import java.util.List;
 /**
  * The line class represents a line in a 2D coordinate system.
  *
  * @author Eitan Maimoni
  * @version 19.0.2
- * @since 2023-04-20
+ * @since 2023-05-04
  */
-
 public class Line {
-    private final Point startPoint;
-    private final Point endPoint;
-    private final double slope;
-    private final double yIntercept;
     private static final double EPSILON = 1e-10;
     private static final double NO_SLOPE = Double.POSITIVE_INFINITY;
-    // A special value representing a vertical line
+    private final Point start;
+    private final Point end;
+    private final double slope;
+    private final double yIntercept;
     /**
-     * Instantiates a new Line.
+     * Constructs a new Line.
      *
      * @param start the start point of the line
      * @param end   the end point of the line
      */
     public Line(Point start, Point end) {
-        this.startPoint = start;
-        this.endPoint = end;
+        this.start = start;
+        this.end = end;
         this.slope = slopeCalculator();
         this.yIntercept = yInterceptCalculator();
     }
     /**
-     * Instantiates a new Line.
+     * Constructs a new Line.
      *
      * @param x1 the x-coordinate of the start point of the line
      * @param y1 the y-coordinate of the start point of the line
@@ -35,8 +34,8 @@ public class Line {
      * @param y2 the y-coordinate of the end point of the line
      */
     public Line(double x1, double y1, double x2, double y2) {
-        this.startPoint = new Point(x1, y1);
-        this.endPoint = new Point(x2, y2);
+        this.start = new Point(x1, y1);
+        this.end = new Point(x2, y2);
         this.slope = slopeCalculator();
         this.yIntercept = yInterceptCalculator();
     }
@@ -46,17 +45,15 @@ public class Line {
      * @return the slope of the line
      */
     public double slopeCalculator() {
-        double x1, y1, x2, y2, slope;
-        x1 = this.startPoint.getX();
-        y1 = this.startPoint.getY();
-        x2 = this.endPoint.getX();
-        y2 = this.endPoint.getY();
-        // If the line is vertical, return the special value NO_SLOPE
-        if (Math.abs(x2 - x1) < EPSILON) {
+        double x1 = this.start.getX();
+        double y1 = this.start.getY();
+        double x2 = this.end.getX();
+        double y2 = this.end.getY();
+        if (isDoubleEqual(x2, x1)) {
             return NO_SLOPE;
         }
-        slope = (y2 - y1) / (x2 - x1);
-        return slope;
+        // return the slope
+        return (y2 - y1) / (x2 - x1);
     }
     /**
      * Y intercept calculator.
@@ -64,10 +61,21 @@ public class Line {
      * @return the y-intercept of the line
      */
     public double yInterceptCalculator() {
-        double x1 = this.startPoint.getX();
-        double y1 = this.startPoint.getY();
+        double x1 = this.start.getX();
+        double y1 = this.start.getY();
         double slope = this.slope;
         return y1 - (slope * x1);
+    }
+    /**
+     * Determines whether two double values are equal
+     * within a small epsilon value.
+     *
+     * @param a the first double value to compare
+     * @param b the second double value to compare
+     * @return true if the values are equal\, false otherwise
+     */
+    public boolean isDoubleEqual(double a, double b) {
+        return Math.abs(a - b) < 1e-10;
     }
     /**
      * Checks whether a value is within a given range, inclusive.
@@ -83,9 +91,7 @@ public class Line {
             a = b;
             b = temp;
         }
-        return (a > v && v > b || Math.abs(a - v) < EPSILON
-                || Math.abs(b - v) < EPSILON);
-
+        return (a > v && v > b || isDoubleEqual(a, v) || isDoubleEqual(b, v));
     }
     /**
      * Determines whether a given value is inside a specified range.
@@ -104,12 +110,39 @@ public class Line {
         return (a > v && v > b);
     }
     /**
+     * Determines whether a given point lies on this line.
+     *
+     * @param point the point to be checked
+     * @return true if the point lies on the line, false otherwise
+     */
+    public boolean isPointOnLine(Point point) {
+        double lineX1 = this.start.getX();
+        double lineX2 = this.end.getX();
+        double lineY1 = this.start.getY();
+        double lineY2 = this.end.getY();
+        double pointX = point.getX();
+        double pointY = point.getY();
+        if (this.slope == NO_SLOPE) {
+            if (isDoubleEqual(pointX, lineX1)) {
+                return isInRange(lineY1, lineY2, pointY);
+            }
+            return false;
+        } else {
+            // checks if point is on the line by using the
+            // equation of the line (y=mx+c)
+            if (Math.abs(pointY - this.slope * pointX - this.yIntercept) < EPSILON) {
+                return isInRange(lineX1, lineX2, pointX);
+            }
+            return false;
+        }
+    }
+    /**
      * Return the length of the line.
      *
      * @return the length of the line as a double
      */
     public double length() {
-        return startPoint.distance(endPoint);
+        return start.distance(end);
     }
     /**
      * Returns the middle point of the line.
@@ -117,14 +150,12 @@ public class Line {
      * @return the middle point of the line as a Point object
      */
     public Point middle() {
-        double x1, y1, x2, y2;
-        x1 = this.startPoint.getX();
-        y1 = this.startPoint.getY();
-        x2 = this.endPoint.getX();
-        y2 = this.endPoint.getY();
-        double x, y;
-        x = (x1 + x2) / 2;
-        y = (y1 + y2) / 2;
+        double x1 = this.start.getX();
+        double y1 = this.start.getY();
+        double x2 = this.end.getX();
+        double y2 = this.end.getY();
+        double x = (x1 + x2) / 2;
+        double y = (y1 + y2) / 2;
         return new Point(x, y);
     }
     /**
@@ -133,7 +164,7 @@ public class Line {
      * @return the start point of the line as a Point object
      */
     public Point start() {
-        return this.startPoint;
+        return this.start;
     }
     /**
      * Returns the end point of the line.
@@ -141,7 +172,7 @@ public class Line {
      * @return the end point of the line as a Point object
      */
     public Point end() {
-        return this.endPoint;
+        return this.end;
     }
     /**
      * Checks if two lines intersect.
@@ -150,22 +181,20 @@ public class Line {
      * @return true if the lines intersect, false otherwise
      */
     public boolean isIntersecting(Line other) {
-        double thisX1 = this.startPoint.getX();
-        double thisX2 = this.endPoint.getX();
-        double otherX1 = other.startPoint.getX();
-        double otherX2 = other.endPoint.getX();
+        double thisX1 = this.start.getX();
+        double thisX2 = this.end.getX();
+        double otherX1 = other.start.getX();
+        double otherX2 = other.end.getX();
         // if one of the lines has no slope, make the check in special method
         if (this.slope == NO_SLOPE || other.slope == NO_SLOPE) {
             return this.isIntersectingVertical(other);
         }
         // if the slopes are equal, the lines are parallel or coincident
-        if (Math.abs(other.slope - this.slope) < EPSILON) {
-            if (Math.abs(other.yIntercept - this.yIntercept) < EPSILON) {
+        if (isDoubleEqual(other.slope, this.slope)) {
+            if (isDoubleEqual(other.yIntercept, this.yIntercept)) {
                 // the lines are coincident, check if they overlap
-                return (isInRange(otherX1, otherX2, thisX1)
-                        || isInRange(otherX1, otherX2, thisX2)
-                        || isInRange(thisX1, thisX2, otherX1)
-                        || isInRange(thisX1, thisX2, otherX2));
+                return (isInRange(otherX1, otherX2, thisX1) || isInRange(otherX1, otherX2, thisX2)
+                        || isInRange(thisX1, thisX2, otherX1) || isInRange(thisX1, thisX2, otherX2));
             } else {
                 // the lines are parallel and do not intersect
                 return false;
@@ -173,11 +202,8 @@ public class Line {
         } else {
             // the lines might intersect,
             // calculate the intersection point and checks if it in the range
-            double mutualX;
-            mutualX = (this.yIntercept - other.yIntercept)
-                    / (other.slope - this.slope);
-            return (isInRange(otherX1, otherX2, mutualX)
-                    && isInRange(thisX1, thisX2, mutualX));
+            double mutualX = (this.yIntercept - other.yIntercept) / (other.slope - this.slope);
+            return (isInRange(otherX1, otherX2, mutualX) && isInRange(thisX1, thisX2, mutualX));
         }
     }
     /**
@@ -187,53 +213,45 @@ public class Line {
      * @return true if the lines intersect, false otherwise
      */
     public boolean isIntersectingVertical(Line other) {
-        // Get the coordinates of this line
-        double thisX1 = this.startPoint.getX();
-        double  thisY1 = this.startPoint.getY();
-        double  thisX2 = this.endPoint.getX();
-        double  thisY2 = this.endPoint.getY();
-        // Get the coordinates of the other line
-        double  otherX1 = other.startPoint.getX();
-        double  otherY1 = other.startPoint.getY();
-        double  otherX2 = other.endPoint.getX();
-        double  otherY2 = other.endPoint.getY();
-        // Check if both lines have no slope (i.e., are vertical)
+        double thisX1 = this.start.getX();
+        double thisY1 = this.start.getY();
+        double thisX2 = this.end.getX();
+        double thisY2 = this.end.getY();
+        double otherX1 = other.start.getX();
+        double otherY1 = other.start.getY();
+        double otherX2 = other.end.getX();
+        double otherY2 = other.end.getY();
         if (this.slope == NO_SLOPE && other.slope == NO_SLOPE) {
-            // If they have the same x-coordinate within a
-            // small margin of error (epsilon) then they intersect vertically
+            // If they have the same x-coordinate then they intersect vertically
             // if any of the y-coordinates overlap
-            if (Math.abs(otherX1 - thisX1) < EPSILON) {
-                return (isInRange(otherY1, otherY2, thisY1)
-                        || isInRange(otherY1, otherY2, thisY2)
-                        || isInRange(thisY1, thisY2, otherY1)
-                        || isInRange(thisY1, thisY2, otherY2));
+            if (isDoubleEqual(otherX1, thisX1)) {
+                return (isInRange(otherY1, otherY2, thisY1) || isInRange(otherY1, otherY2, thisY2)
+                        || isInRange(thisY1, thisY2, otherY1) || isInRange(thisY1, thisY2, otherY2));
             }
-            // Otherwise, they don't intersect
             return false;
         } else if (this.slope == NO_SLOPE) {
-            // Check if this line has no slope (i.e., is vertical)
             // Find the y-coordinate where the other line might intersect
-            // with this line's x-coordinate
+            // with this line
+            double mutualX = thisX1;
             double mutualY;
-            mutualY = (other.slope) * thisX1 + other.yIntercept;
+            mutualY = (other.slope) * mutualX + other.yIntercept;
             // The lines intersect vertically if the x-coordinate of the other
             // line is within the range of this line's x-coordinates
             // and the y-coordinate of the intersection point is within
             // the range of this line's y-coordinates
-            return (isInRange(otherX1, otherX2, thisX1)
-                    && isInRange(thisY1, thisY2, mutualY));
+            return (isInRange(otherX1, otherX2, mutualX) && isInRange(thisY1, thisY2, mutualY));
         } else {
             // Otherwise, this other line has no slope
             // Find the y-coordinate where this line intersects
             // with the other line's x-coordinate
+            double mutualX = otherX1;
             double mutualY;
-            mutualY = (this.slope) * otherX1 + this.yIntercept;
+            mutualY = (this.slope) * mutualX + this.yIntercept;
             // The lines intersect vertically if the x-coordinate of this
             // line is within the range of the other line's x-coordinates
             // and the y-coordinate of the intersection point is within
             // the range of the other line's y-coordinates
-            return (isInRange(thisX1, thisX2, otherX1)
-                    && isInRange(otherY1, otherY2, mutualY));
+            return (isInRange(thisX1, thisX2, mutualX) && isInRange(otherY1, otherY2, mutualY));
         }
     }
     /**
@@ -243,51 +261,41 @@ public class Line {
      * @return the intersection point if the lines intersect, null otherwise
      */
     public Point intersectionWith(Line other) {
-        // Check if the lines intersect
         if (!isIntersecting(other)) {
             return null;
         }
-        // Check if the lines are equal
         if (this.equals(other)) {
             return null;
         }
-        // Get the X coordinates of the start and end points of this line
-        double thisX1 = this.startPoint.getX();
-        double thisX2 = this.endPoint.getX();
-        // Get the X coordinates of the start and end points of the other line
-        double otherX1 = other.startPoint.getX();
-        double otherX2 = other.endPoint.getX();
+        double thisX1 = this.start.getX();
+        double thisX2 = this.end.getX();
+        double otherX1 = other.start.getX();
+        double otherX2 = other.end.getX();
         // if one of the lines has no slope, make the check in special method
         if (this.slope == NO_SLOPE || other.slope == NO_SLOPE) {
             return intersectionWithVertical(other);
         }
-        // Check if the slopes of the two lines are equal,
-        // if so, they are parallel
-        if (Math.abs(other.slope - this.slope) < EPSILON) {
+        if (isDoubleEqual(other.slope, this.slope)) {
             // Check if the two lines overlap at any point
-            if (isInsideRange(otherX1, otherX2, thisX1)
-                    || isInsideRange(otherX1, otherX2, thisX2)
-                    || isInsideRange(thisX1, thisX2, otherX1)
-                    || isInsideRange(thisX1, thisX2, otherX2)) {
+            // (we already know we have intersection)
+            if (isInsideRange(otherX1, otherX2, thisX1) || isInsideRange(otherX1, otherX2, thisX2)
+                    || isInsideRange(thisX1, thisX2, otherX1) || isInsideRange(thisX1, thisX2, otherX2)) {
                 return null;
             } else {
                 // If the two lines don't overlap, and we already know that
                 // there is an intersection, so it must be in the edges of the
                 // line
-                if (this.startPoint.equals(other.startPoint)
-                        || this.startPoint.equals(other.endPoint)) {
-                    return this.startPoint;
+                if (this.start.equals(other.start) || this.start.equals(other.end)) {
+                    return this.start;
                 } else {
-                    return this.endPoint;
+                    return this.end;
                 }
             }
         } else {
             // If the two lines have different slopes,
             // calculate the intersection point
-            double mutualX, mutualY;
-            mutualX = (this.yIntercept - other.yIntercept)
-                    / (other.slope - this.slope);
-            mutualY = (other.slope) * mutualX + other.yIntercept;
+            double mutualX = (this.yIntercept - other.yIntercept) / (other.slope - this.slope);
+            double mutualY = (other.slope) * mutualX + other.yIntercept;
             // Create a new Point object with the coordinates
             // of the intersection point
             return new Point(mutualX, mutualY);
@@ -300,71 +308,58 @@ public class Line {
      * @return the point of intersection, or null if there is no intersection
      */
     public Point intersectionWithVertical(Line other) {
-        // Extract the x and y values of the start
-        // and end points of the two lines
-        double thisX1 = this.startPoint.getX();
-        double thisY1 = this.startPoint.getY();
-        double thisX2 = this.endPoint.getX();
-        double  thisY2 = this.endPoint.getY();
-        double  otherX1 = other.startPoint.getX();
-        double  otherY1 = other.startPoint.getY();
-        double  otherX2 = other.endPoint.getX();
-        double  otherY2 = other.endPoint.getY();
-        // Handle the case where both lines are vertical
+        double thisX1 = this.start.getX();
+        double thisY1 = this.start.getY();
+        double thisY2 = this.end.getY();
+        double otherX1 = other.start.getX();
+        double otherY1 = other.start.getY();
+        double otherY2 = other.end.getY();
         if (this.slope == NO_SLOPE && other.slope == NO_SLOPE) {
-            // Check if the two lines overlap in the y direction
-            if (isInsideRange(otherY1, otherY2, thisY1)
-                    || isInsideRange(otherY1, otherY2, thisY2)
-                    || isInsideRange(thisY1, thisY2, otherY1)
-                    || isInsideRange(thisY1, thisY2, otherY2)) {
-                // If there is overlap, the lines do not intersect
+            // Check if the two lines overlap at any point
+            // (we already know we have intersection)
+            if (isInsideRange(otherY1, otherY2, thisY1) || isInsideRange(otherY1, otherY2, thisY2)
+                    || isInsideRange(thisY1, thisY2, otherY1) || isInsideRange(thisY1, thisY2, otherY2)) {
                 return null;
             } else {
                 // If the two lines don't overlap, and we already know that
                 // there is an intersection,
                 // so it must be in the edges of the line
-                if (this.startPoint.equals(other.startPoint)
-                        || this.startPoint.equals(other.endPoint)) {
-                    return this.startPoint;
+                if (this.start.equals(other.start) || this.start.equals(other.end)) {
+                    return this.start;
                 } else {
-                    return this.endPoint;
+                    return this.end;
                 }
             }
         } else if (this.slope == NO_SLOPE) {
-            // Handle the case where this line is vertical
-            // Check if the x-coordinate of the vertical line is within
-            // the x range of the other line
-            if (isInRange(otherX1, otherX2, thisX1)) {
-                // Calculate the y-coordinate of the intersection point
-                double mutualY;
-                mutualY = (other.slope) * thisX1 + other.yIntercept;
-                // Check if the y-coordinate of the intersection point
-                // is within the y range of the vertical line
-                if (isInRange(thisY1, thisY2, mutualY)) {
-                    // If it is, return the intersection point
-                    return new Point(thisX1, mutualY);
-                }
-            }
-            // If there is no intersection, return null
-            return null;
+            double mutualY = (other.slope) * thisX1 + other.yIntercept;
+            double mutualX = thisX1;
+            return new Point(mutualX, mutualY);
         } else {
-            // Handle the case where the other line is vertical
-            // Check if the x-coordinate of the other line
-            // is within the x range of this line
-            if (isInRange(thisX1, thisX2, otherX1)) {
-                // Calculate the y-coordinate of the intersection point
-                double mutualY;
-                mutualY = (this.slope) * otherX1 + this.yIntercept;
-                // Check if the y-coordinate of the intersection point
-                // is within the y range of the other line
-                if (isInRange(otherY1, otherY2, mutualY)) {
-                    // If it is, return the intersection point
-                    return new Point(otherX1, mutualY);
-                }
-            }
-            // If there is no intersection, return null
+            double mutualY = (this.slope) * otherX1 + this.yIntercept;
+            double mutualX = otherX1;
+            return new Point(mutualX, mutualY);
+        }
+    }
+    /**
+     * Closest intersection to start of line point.
+     *
+     * @param rectangle the rectangle
+     * @return the point
+     */
+    public Point closestIntersectionToStartOfLine(Rectangle rectangle) {
+        if (!rectangle.hasIntersectionPoints(this)) {
             return null;
         }
+        List<Point> points = rectangle.intersectionPoints(this);
+        Point closetPoint = points.get(0);
+        double smallestDistance = this.start.distance(closetPoint);
+        for (Point point : points) {
+            if (smallestDistance > this.start.distance(point)) {
+                smallestDistance = this.start.distance(point);
+                closetPoint = point;
+            }
+        }
+        return closetPoint;
     }
     /**
      * Checks if this line is equal to another line.
@@ -373,22 +368,12 @@ public class Line {
      * @return true if the lines are equal, false otherwise
      */
     public boolean equals(Line other) {
-        // Check if the start and end points of this line
-        // are equal to the start and end points of the other line.
-        if (this.startPoint.equals(other.startPoint)
-                && this.endPoint.equals(other.endPoint)) {
+        if (this.start.equals(other.start) && this.end.equals(other.end)) {
             return true;
         }
-        // Check if the start and end points of this line
-        // are equal to the end and start points of the other line.
-        if (this.startPoint.equals(other.endPoint)
-                && this.endPoint.equals(other.startPoint)) {
+        if (this.start.equals(other.end) && this.end.equals(other.start)) {
             return true;
         }
-        // If none of the above conditions are met,
-        // then the lines are not equal.
         return false;
     }
 }
-
-

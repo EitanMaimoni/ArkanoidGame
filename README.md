@@ -1,30 +1,34 @@
-# Arkanoid Game
+# Arkanoid Game Part 2
 
-This project is an implementation of the classic Arkanoid game in Java.
+This project is an implementation of the classic Arkanoid game in Java, part 2.
 
 ## How to Run the Project
 
 1. **Navigate to the Project Directory:**
     ```bash
-    cd path/to/ArkanoidGame
+    cd path/to/ArkanoidGameP2
     ```
 
 2. **Run the JAR File:**
     ```bash
-    java -jar bin/ArkanoidGame.jar
+    java -jar bin/ArkanoidGameP2.jar
     ```
 
 ## Description of Classes
 
-- **AbstractArtDrawing.java**: Draws random lines and displays them on a GUI window.
+- **Ass3Game.java**: Entry point of the application, responsible for running the game.
 - **Ball.java**: Represents a 2D ball object with position, radius, color, and velocity.
-- **BouncingBallAnimation.java**: Creates a bouncing ball animation.
+- **Block.java**: Represents a block in 2D space.
+- **Collidable.java**: Interface representing an object that can be collided with.
+- **CollisionInfo.java**: Represents information about a collision.
+- **Game.java**: Represents the game, consisting of sprites and a game environment.
+- **GameEnvironment.java**: Manages a collection of Collidable objects and provides methods for adding new objects and checking for collisions.
 - **Line.java**: Represents a line in a 2D coordinate system.
-- **MultipleBouncingBallsAnimation.java**: Creates an animation of multiple bouncing balls.
-- **MultipleFramesBouncingBallsAnimation.java**: Creates an animation of multiple bouncing balls within different frames.
+- **Paddle.java**: Represents the player-controlled paddle in the game.
 - **Point.java**: Represents a point in a 2D coordinate system.
-- **Test.java**: Contains methods to test drawing random lines and intersection points.
-- **TestForAss2.java**: A test suite to validate the functionality of other classes.
+- **Rectangle.java**: Represents a rectangle in 2D space.
+- **Sprite.java**: Interface representing an object in the game.
+- **SpriteCollection.java**: A collection of sprites that can be drawn on and updated.
 - **Velocity.java**: Specifies the change in position on the `x` and `y` axes.
 
 ## Dependencies
@@ -34,3 +38,4 @@ This project is an implementation of the classic Arkanoid game in Java.
 ## Author
 
 Eitan Maimoni
+
