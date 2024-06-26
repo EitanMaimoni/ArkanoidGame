@@ -2,9 +2,6 @@
 
 This project is an implementation of the classic Arkanoid game in Java.
 
-## Project Structure
-
-
 ## How to Run the Project
 
 1. **Navigate to the Project Directory:**
