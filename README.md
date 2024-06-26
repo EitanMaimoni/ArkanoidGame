@@ -1,6 +1,3 @@
-# Arkanoid Game Part 2
-
-This project is an implementation of the classic Arkanoid game in Java, part 2.
 
 ## How to Run the Project
 
@@ -9,7 +6,17 @@ This project is an implementation of the classic Arkanoid game in Java, part 2.
     cd path/to/ArkanoidGameP2
     ```
 
-2. **Run the JAR File:**
+2. **Compile the Java Files:**
+    ```bash
+    javac -d bin -cp "lib/biuoop-1.4.jar" src/*.java
+    ```
+
+3. **Create the JAR File:**
+    ```bash
+    jar cfm bin/ArkanoidGameP2.jar src/MANIFEST.MF -C bin .
+    ```
+
+4. **Run the JAR File:**
     ```bash
     java -jar bin/ArkanoidGameP2.jar
     ```
@@ -38,4 +45,3 @@ This project is an implementation of the classic Arkanoid game in Java, part 2.
 ## Author
 
 Eitan Maimoni
-
