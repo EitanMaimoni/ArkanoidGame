@@ -28,7 +28,7 @@ public class WideEasy implements LevelInformation {
     }
     @Override
     public int paddleSpeed() {
-        return 1;
+        return 3;
     }
     @Override
     public int paddleWidth() {

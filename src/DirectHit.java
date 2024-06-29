@@ -38,7 +38,7 @@ public class DirectHit implements LevelInformation {
     }
     @Override
     public Sprite getBackground() {
-        return new DayBackground();
+        return new NightBackground();
     }
     @Override
     public List<Block> blocks() {

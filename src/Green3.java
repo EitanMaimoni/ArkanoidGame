@@ -40,7 +40,7 @@ public class Green3 implements LevelInformation {
     }
     @Override
     public Sprite getBackground() {
-        return new NightBackground();
+        return new DayBackground();
     }
     @Override
     public List<Block> blocks() {

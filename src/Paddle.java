@@ -35,7 +35,7 @@ public class Paddle implements Sprite, Collidable, KeyboardSensor  {
         double x = (400 - (width * 0.5));
         Point point = new Point(x, 15);
         this.rect = new Rectangle(point, width, HEIGHT);
-        this.color = Color.orange;
+        this.color = Color.lightGray;
         this.keyboard = keyboard;
         this.speed = speed;
         this.width = width;

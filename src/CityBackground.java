@@ -15,7 +15,7 @@ public class CityBackground implements Sprite {
     @Override
     public void drawOn(DrawSurface d) {
         // Draw the sky
-        d.setColor(new Color(255, 127, 80));
+        d.setColor(new Color(200, 127, 80));
         d.fillRectangle(0, 0, (int) WINDOW_WIDTH, (int) WINDOW_HEIGHT);
         // Draw the sun (partially hidden behind the big building)
         int sunX = 370;
