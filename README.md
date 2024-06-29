@@ -5,7 +5,7 @@ This project is an implementation of the classic Arkanoid game in Java.
 <details>
   <summary>How to Run the Project</summary>
   
-  c:\Users\Eitan\Downloads\Setup.gif
+  ![alt text](Setup.gif)
 
   1. **Navigate to the Project Directory:**
       ```bash
