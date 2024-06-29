@@ -1,11 +1,13 @@
 # Arkanoid Game
 
 This project is an implementation of the classic Arkanoid game in Java.
-<video controls src="gameplay.mp4" title="Title"></video>
+
+  ![Setup Process](GIF/Gameplay.gif)
+
 <details>
   <summary>How to Run the Project</summary>
   
-  ![alt text](Setup.gif)
+  ![Setup Process](GIF/Setup.gif)
 
   1. **Navigate to the Project Directory:**
       ```bash
