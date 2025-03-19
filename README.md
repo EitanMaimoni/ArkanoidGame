@@ -7,33 +7,35 @@ This project is an implementation of the classic Arkanoid game in Java.
 <details>
   <summary>How to Run the Project</summary>
   
-  ![Setup Process](GIF/Setup.gif)
+  <h3>Windows (PowerShell or CMD):</h3>
 
-  ### Step 1: Compile the Java Files
+  <h4>Step 1: Enter the Project Directory</h4>
+  <pre><code>cd path\to\your\project</code></pre>
 
-  **Windows (PowerShell or CMD):**
-  ```powershell
-  javac -cp "lib\biuoop-1.4.jar" -d bin -sourcepath src src\game\Ass6Game.java
-  ```
+  <h4>Step 2: Compile the Java Files</h4>
 
-  **Mac/Linux (Terminal):**
-  ```bash
-  javac -cp "lib/biuoop-1.4.jar" -d bin -sourcepath src src/game/Ass6Game.java
-  ```
+  <pre><code>javac -cp "lib\biuoop-1.4.jar" -d bin -sourcepath src src\game\Ass6Game.java</code></pre>
 
-  ### Step 2: Run the Program
+  <h4>Step 3: Run the Program</h4>
 
-  **Windows (PowerShell or CMD):**
-  ```powershell
-  java -cp "lib\biuoop-1.4.jar;bin" game.Ass6Game
-  ```
+  <pre><code>java -cp "lib\biuoop-1.4.jar;bin" game.Ass6Game</code></pre>
 
-  **Mac/Linux (Terminal):**
-  ```bash
-  java -cp "lib/biuoop-1.4.jar:bin" game.Ass6Game
-  ```
+  <h3>Mac/Linux (Terminal):</h3>
+
+  <h4>Step 1: Enter the Project Directory</h4>
+  <pre><code>cd path/to/your/project</code></pre>
+
+  <h4>Step 2: Compile the Java Files</h4>
+
+  <pre><code>javac -cp "lib/biuoop-1.4.jar" -d bin -sourcepath src src/game/Ass6Game.java</code></pre>
+
+  <h4>Step 3: Run the Program</h4>
+
+  <pre><code>java -cp "lib/biuoop-1.4.jar:bin" game.Ass6Game</code></pre>
 
 </details>
+
+
 
 <details>
   <summary>Description of Classes</summary>
@@ -79,7 +81,7 @@ This project is an implementation of the classic Arkanoid game in Java.
 
 ## Dependencies
 
-- **biuoop-1.4.jar**: A required library for the GUI components.
+- **biuoop-1.4.jar**: A required library for the GUI components. (included in the project)
 
 ## Author
 
