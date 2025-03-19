@@ -9,25 +9,29 @@ This project is an implementation of the classic Arkanoid game in Java.
   
   ![Setup Process](GIF/Setup.gif)
 
-  1. **Navigate to the Project Directory:**
-      ```bash
-      cd path/to/ArkanoidGameP4
-      ```
+  ### Step 1: Compile the Java Files
 
-  2. **Compile the Java Files:**
-      ```bash
-      javac -d bin -cp "lib/biuoop-1.4.jar" src/*.java
-      ```
+  **Windows (PowerShell or CMD):**
+  ```powershell
+  javac -cp "lib\biuoop-1.4.jar" -d bin -sourcepath src src\game\Ass6Game.java
+  ```
 
-  3. **Create the JAR File:**
-      ```bash
-      jar cfm bin/ArkanoidGameP4.jar src/MANIFEST.MF -C bin .
-      ```
+  **Mac/Linux (Terminal):**
+  ```bash
+  javac -cp "lib/biuoop-1.4.jar" -d bin -sourcepath src src/game/Ass6Game.java
+  ```
 
-  4. **Run the JAR File with Classpath:**
-      ```bash
-      java -cp "bin/ArkanoidGameP4.jar;lib/biuoop-1.4.jar" Ass6Game
-      ```
+  ### Step 2: Run the Program
+
+  **Windows (PowerShell or CMD):**
+  ```powershell
+  java -cp "lib\biuoop-1.4.jar;bin" game.Ass6Game
+  ```
+
+  **Mac/Linux (Terminal):**
+  ```bash
+  java -cp "lib/biuoop-1.4.jar:bin" game.Ass6Game
+  ```
 
 </details>
 
@@ -80,3 +84,6 @@ This project is an implementation of the classic Arkanoid game in Java.
 ## Author
 
 Eitan Maimoni
+
+
+
